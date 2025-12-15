@@ -9,13 +9,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const diaryList = document.getElementById('diary-list');
     const historySection = document.getElementById('history-section');
     
-    // 🎵 음악 관련 요소
+    // 🎵 음악 요소
     const audio = document.getElementById('bgm');
     const soundBtn = document.getElementById('sound-btn');
     const iconOn = document.getElementById('icon-on');
     const iconOff = document.getElementById('icon-off');
 
-    // ❄️ 배경 눈 관련 요소
+    // ❄️ 배경 눈 컨테이너
     const bgSnowContainer = document.getElementById('bg-snow-container');
     const snowOptions = document.querySelectorAll('.snow-option');
 
@@ -53,32 +53,57 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 🎵 음악 버튼 클릭 기능
     soundBtn.addEventListener('click', () => {
+        // 음악 파일이 로드되지 않았을 때 체크
+        if(audio.error) {
+            alert("음악 파일을 찾을 수 없습니다. assets 폴더를 확인해주세요!");
+            return;
+        }
+
         if (audio.paused) {
-            // 음악이 멈춰있으면 -> 재생
-            audio.play();
-            iconOn.classList.remove('hidden'); // 소리 아이콘 보이기
-            iconOff.classList.add('hidden');   // 음소거 아이콘 숨기기
+            // 재생 시도
+            const playPromise = audio.play();
+            if (playPromise !== undefined) {
+                playPromise.then(_ => {
+                    iconOn.classList.remove('hidden'); 
+                    iconOff.classList.add('hidden');
+                })
+                .catch(error => {
+                    console.log("재생 오류:", error);
+                    alert("음악을 재생할 수 없습니다. 파일을 확인해주세요.");
+                });
+            }
         } else {
-            // 음악이 나오고 있으면 -> 일시정지
             audio.pause();
-            iconOn.classList.add('hidden');    // 소리 아이콘 숨기기
-            iconOff.classList.remove('hidden');// 음소거 아이콘 보이기
+            iconOn.classList.add('hidden');    
+            iconOff.classList.remove('hidden');
         }
     });
 
-    // ❄️ 배경에 눈 내리는 기능
+    // ❄️ 배경에 눈 내리는 기능 (화면 전체)
     function createBgSnowflake() {
+        if(!bgSnowContainer) return; // 에러 방지
+
         const flake = document.createElement('div');
         flake.classList.add('bg-snowflake');
-        const size = Math.random() * 5 + 2 + 'px'; 
+        
+        // 크기 3~8px
+        const size = Math.random() * 5 + 3 + 'px'; 
         flake.style.width = size;
         flake.style.height = size;
+        
+        // 위치 랜덤
         flake.style.left = Math.random() * 100 + 'vw';
-        flake.style.opacity = Math.random();
-        flake.style.animationDuration = Math.random() * 3 + 2 + 's';
+        
+        // 애니메이션 속도 3~6초
+        flake.style.animationDuration = Math.random() * 3 + 3 + 's';
+        
         bgSnowContainer.appendChild(flake);
-        setTimeout(() => { flake.remove(); }, 5000); 
+        
+        // 6초 뒤 삭제
+        setTimeout(() => { flake.remove(); }, 6000); 
     }
+    
+    // 0.2초마다 눈 생성
     setInterval(createBgSnowflake, 200);
 
     // 저장 버튼 클릭
