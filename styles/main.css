@@ -1,71 +1,54 @@
-/* 1. 기본 설정 */
+/* 1. 전체 화면 설정 */
 body {
     margin: 0;
-    overflow-x: hidden; /* 가로 스크롤 방지 */
-    font-family: 'Pretendard', sans-serif; /* 폰트 깔끔하게 */
+    overflow-x: hidden;
+    font-family: 'Pretendard', sans-serif;
 }
 
 #app-container {
     position: relative;
     width: 100%;
-    min-height: 100vh; /* 화면 꽉 차게 */
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #f0f8ff; /* 기본 배경색 */
-    padding-top: 30px;
+    background-color: #f0f8ff;
+    padding-top: 20px;
 }
 
-/* 2. 눈송이 떨어지는 공간 (클릭 방지) */
-/* 🚨 여기가 중요합니다! 버튼 안 눌리는 문제 해결 코드 */
-.snowflake, #snow-container {
-    pointer-events: none; /* 눈송이가 마우스 클릭을 방해하지 않게 함 */
-    z-index: 1; /* 제일 뒤로 보냄 */
+/* 🚨 [핵심] 눈송이 배경이 버튼 클릭을 방해하지 않게 설정 */
+canvas, .snowflake {
+    pointer-events: none; /* 클릭 통과 */
+    z-index: 1; /* 맨 뒤로 */
 }
 
-/* 3. 입력창 & 버튼 구역 (크게! 클릭 되게!) */
+/* 2. 입력창 구역 (아주 크게!) */
 #input-section {
-    z-index: 999; /* 🚨 제일 앞으로 가져옴 (이제 클릭 됨!) */
-    position: relative;
+    z-index: 999; /* 🚨 제일 앞으로 (클릭 잘 되게) */
+    background: rgba(255, 255, 255, 0.9);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
     
-    background: rgba(255, 255, 255, 0.8); /* 반투명 흰색 배경 */
-    padding: 30px; /* 안쪽 여백 넉넉하게 */
-    border-radius: 20px; /* 둥글게 */
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1); /* 그림자 */
-    
-    width: 85%; /* 화면의 85% 차지 */
-    max-width: 500px; /* 너무 커지지 않게 제한 */
+    width: 90%; /* 화면 꽉 차게 */
+    max-width: 500px; /* 너무 퍼지지는 않게 */
     
     display: flex;
     flex-direction: column;
     gap: 15px; /* 칸 사이 간격 */
+    margin-bottom: 20px;
 }
 
-/* 4. 입력칸, 선택박스, 버튼 크기 키우기 (요청하신 부분) */
-input, select, button {
-    width: 100%; /* 가로 꽉 차게 */
-    height: 55px; /* 높이 키움 (뚱뚱하게) */
-    font-size: 18px; /* 글씨 키움 */
-    padding: 0 15px; /* 글씨 안쪽 여백 */
-    border-radius: 12px; /* 모서리 둥글게 */
-    border: 2px solid #ddd; /* 테두리 */
+/* 3. 입력칸, 선택박스, 버튼 크기 (대폭 확대) */
+#emotion-select, #snowflake-choice, #diary-text, #save-button {
+    width: 100%;
+    height: 60px; /* 높이 60px (엄청 큼) */
+    font-size: 18px; /* 글씨 큼 */
+    padding: 0 15px;
+    border-radius: 12px;
+    border: 2px solid #ddd;
     box-sizing: border-box;
-}
-
-/* 버튼 꾸미기 */
-button#save-btn {
-    background-color: #4a90e2; /* 파란색 */
-    color: white;
-    font-weight: bold;
-    font-size: 20px; /* 버튼 글씨는 더 크게 */
-    border: none;
-    cursor: pointer;
-    margin-top: 10px;
-}
-
-button#save-btn:hover {
-    background-color: #357abd; /* 마우스 올리면 진하게 */
-    transform: scale(1.02); /* 살짝 커짐 */
+    font-family: inherit;
 }
 
 .selection-row {
@@ -73,13 +56,28 @@ button#save-btn:hover {
     gap: 10px;
 }
 
-/* 5. 병 이미지 영역 (위치 잡기) */
+/* 버튼 꾸미기 */
+#save-button {
+    background-color: #4a90e2;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+}
+#save-button:hover {
+    background-color: #357abd;
+    transform: scale(1.02);
+}
+
+/* 4. 병 위치 및 눈송이 상자 */
 #bottle-area {
     position: relative;
-    margin-top: 40px; /* 입력창이랑 거리 둠 */
-    width: 300px;  /* 병 크기 */
-    height: 400px;
-    z-index: 5; /* 눈송이보다 앞에 둠 */
+    width: 300px; /* 병 너비 */
+    height: 400px; /* 병 높이 */
+    z-index: 5;
+    margin-bottom: 50px; /* 바닥 여백 */
 }
 
 #bottle-image {
@@ -88,14 +86,13 @@ button#save-btn:hover {
     object-fit: contain;
 }
 
-/* 눈송이 쌓이는 투명 상자 */
+/* 눈송이가 쌓이는 투명 상자 (병 안에 맞춤) */
 #snow-pile {
     position: absolute;
-    /* 병 이미지에 맞춰서 이 숫자를 조절해야 함 */
     bottom: 20px; 
     left: 20px;
     right: 20px;
-    height: 250px;
-    /* border: 1px solid red;  <- 위치 확인할 때 주석 풀기 */
-    overflow: hidden; /* 병 밖으로 눈 안 나가게 */
+    height: 280px; /* 눈 쌓이는 높이 */
+    overflow: hidden; /* 병 밖으로 안 삐져나게 */
+    /* border: 1px solid red; <--- 위치 확인할 때만 주석 푸세요 */
 }
