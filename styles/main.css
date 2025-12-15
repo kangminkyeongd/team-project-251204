@@ -16,56 +16,50 @@ body {
     transition: background 0.8s ease-in-out;
     padding-top: 20px;
     padding-bottom: 100px; 
-    z-index: 10;
+    /* 🚨 중요: 배경색이 칠해지는 곳입니다. 눈송이는 이것보다 위에 떠야 보입니다. */
+    z-index: 10; 
 }
 
-/* 🎵 소리 버튼 디자인 */
+/* 🎵 소리 버튼 */
 #sound-btn {
     position: fixed; 
-    top: 20px;       
-    right: 20px;     
+    top: 20px; right: 20px;     
     background-color: #ffffff;
     border: 2px solid #333;
     border-radius: 50%;
-    width: 50px;
-    height: 50px;
+    width: 50px; height: 50px;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: flex; align-items: center; justify-content: center;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     transition: transform 0.2s, background-color 0.2s;
-    z-index: 2000; 
+    z-index: 2000; /* 맨 위 */
 }
+#sound-btn:hover { transform: scale(1.1); background-color: #f0f0f0; }
+.icon-svg { width: 24px; height: 24px; fill: #333; }
+.hidden { display: none; }
 
-#sound-btn:hover {
-    transform: scale(1.1); 
-    background-color: #f0f0f0;
-}
-
-/* 아이콘 스타일 */
-.icon-svg {
-    width: 24px;
-    height: 24px;
-    fill: #333;
-}
-
-/* 상태에 따라 아이콘 숨기기/보이기 */
-.hidden {
-    display: none;
-}
-
-/* ❄️ 배경 눈송이 스타일 */
+/* ❄️ 배경 눈송이 (화면 전체) */
 #bg-snow-container {
     position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    pointer-events: none; z-index: 1; overflow: hidden;
+    top: 0; left: 0; 
+    width: 100%; height: 100%;
+    pointer-events: none; /* 클릭 통과 */
+    /* 🚨 중요: #app-container(z-index:10) 보다 높아야 눈이 보입니다! */
+    z-index: 20; 
 }
+
 .bg-snowflake {
-    position: absolute; top: -10px; background-color: white;
-    border-radius: 50%; opacity: 0.8; animation: bgFall linear infinite;
+    position: absolute; 
+    top: -20px; 
+    background-color: white; /* 흰색 눈 */
+    border-radius: 50%; 
+    opacity: 0.9; /* 잘 보이게 불투명도 높임 */
+    animation: bgFall linear infinite;
+    box-shadow: 0 0 5px rgba(255,255,255,0.8); /* 눈에서 빛나게 */
 }
-@keyframes bgFall { to { transform: translateY(110vh); } }
+@keyframes bgFall { 
+    to { transform: translateY(110vh); } 
+}
 
 /* 🎨 감정별 배경색 */
 .bg-happy   { background: linear-gradient(to bottom, #1e3c72, #2a5298) !important; }
@@ -92,7 +86,8 @@ body {
 canvas, .snowflake { pointer-events: none; z-index: 1; }
 
 #input-section {
-    z-index: 999; background: rgba(255, 255, 255, 0.95);
+    z-index: 100; /* 눈송이(20)보다 높아야 클릭 가능 */
+    background: rgba(255, 255, 255, 0.95);
     padding: 30px; border-radius: 20px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.15);
     width: 90%; max-width: 500px;
@@ -131,8 +126,9 @@ canvas, .snowflake { pointer-events: none; z-index: 1; }
 #save-button:hover { background-color: #357abd; transform: scale(1.02); }
 
 #bottle-area {
-    position: relative; width: 300px; height: 400px; z-index: 5; margin-bottom: 30px;
-    flex-shrink: 0; 
+    position: relative; width: 300px; height: 400px; 
+    z-index: 50; /* 눈송이(20)보다 높아서 병 위로 눈이 안 지나가게 (선택사항) */
+    margin-bottom: 30px; flex-shrink: 0; 
 }
 #bottle-image { width: 100%; height: 100%; object-fit: contain; }
 #snow-pile {
@@ -141,7 +137,9 @@ canvas, .snowflake { pointer-events: none; z-index: 1; }
 }
 
 #history-section {
-    width: 90%; max-width: 500px; margin-top: 20px; z-index: 999; flex-grow: 1; 
+    width: 90%; max-width: 500px; margin-top: 20px; 
+    z-index: 100; /* 눈송이보다 높아야 글씨 잘 보임 */
+    flex-grow: 1; 
 }
 #history-section h2 {
     text-align: center; margin-bottom: 20px; color: #333; font-size: 1.5rem;
