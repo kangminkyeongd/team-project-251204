@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>❄️ 첫눈 일기장</title>
+    <link rel="stylesheet" href="styles/main.css"> 
+</head>
+<body>
+    <div id="app-container"> <header>
+            <h1>Snow Bottle ❄️</h1>
+        </header>
+
+        <section id="input-section">
+            <div class="selection-row">
+                <select id="emotion-select">
+                    <option value="happy">😊 행복 (따뜻함)</option>
+                    <option value="flutter">😆 설렘 (두근거림)</option>
+                    <option value="peace">😌 평온 (잔잔함)</option>
+                    <option value="normal">😐 무난 (일상)</option>
+                    <option value="complex">🤔 복잡 (어지러움)</option>
+                    <option value="tired">😮‍💨 피곤 (흐림)</option>
+                    <option value="gloomy">😢 우울 (가라앉음)</option>
+                    <option value="annoyed">😡 짜증 (날카로움)</option>
+                    <option value="cold">🥶 차가움 (시림)</option>
+                    <option value="lonely">🌨️ 외로움 (텅 빔)</option>
+                </select>
+
+                <select id="snowflake-choice">
+                    <option value="assets/snow-1.png">❄️ 디자인 A</option>
+                    <option value="assets/snow-2.png">❄️ 디자인 B</option>
+                    <option value="assets/snow-3.png">❄️ 디자인 C</option>
+                </select>
+            </div>
+
+            <input type="text" id="diary-text" placeholder="오늘의 한 줄 기록">
+            <button id="save-button">눈송이 담기</button>
+        </section>
+
+        <div id="bottle-area">
+            <img src="assets/bottle.png" id="bottle-image" alt="유리병">
+            
+            <div id="snow-pile"></div>
+        </div>
+        
+        <div id="archive-section">
+            <h2>Archived Memories</h2>
+            <div class="month-block">12월의 눈</div>
+            <div class="month-block">1월의 눈</div>
+        </div>
+
+    </div>
+    <script src="js/script.js"></script> 
+</body>
+</html>
