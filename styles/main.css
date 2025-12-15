@@ -1,103 +1,98 @@
-/* 1. 기본 설정 */
-body { margin: 0; overflow-x: hidden; font-family: 'Pretendard', sans-serif; }
+/* 1. 전체 화면 설정 */
+body {
+    margin: 0;
+    overflow-x: hidden;
+    font-family: 'Pretendard', sans-serif;
+}
 
 #app-container {
-    position: relative; width: 100%; min-height: 100vh;
-    display: flex; flex-direction: column; align-items: center;
-    transition: background 1s ease;
-    padding-top: 20px; background-color: #f0f8ff;
-}
-
-/* 🎨 배경색 설정 */
-.bg-happy   { background: linear-gradient(to bottom, #1e3c72, #2a5298); }
-.bg-flutter { background: linear-gradient(to bottom, #2980b9, #6dd5fa); }
-.bg-peace   { background: #dceefb; }
-.bg-normal  { background: #f0f8ff; }
-.bg-complex { background: #536976; }
-.bg-tired   { background: #232526; }
-.bg-gloomy  { background: #141e30; }
-.bg-annoyed { background: #000000; }
-.bg-cold    { background: #8e9eab; }
-.bg-lonely  { background: #ffffff; }
-
-/* 텍스트 색상 반전 */
-.bg-happy h1, .bg-happy label, .bg-flutter h1, .bg-flutter label,
-.bg-complex h1, .bg-complex label, .bg-tired h1, .bg-tired label,
-.bg-gloomy h1, .bg-gloomy label, .bg-annoyed h1, .bg-annoyed label {
-    color: white;
-}
-
-canvas, .snowflake { pointer-events: none; z-index: 1; }
-
-#input-section {
-    z-index: 999; background: rgba(255, 255, 255, 0.9);
-    padding: 30px; border-radius: 20px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-    width: 90%; max-width: 500px;
-    display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;
-}
-
-#emotion-select, #diary-text, #save-button {
-    width: 100%; height: 55px; font-size: 16px; padding: 0 15px;
-    border-radius: 12px; border: 2px solid #ddd; box-sizing: border-box;
-}
-
-/* 🔴 눈송이 선택기 스타일 (7개 대응) */
-#snowflake-selector-container label {
-    display: block; margin-bottom: 8px; font-weight: bold; color: #555; font-size: 14px;
-}
-.snowflake-options {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
     display: flex;
-    flex-wrap: wrap; /* 📌 중요: 7개라 공간 부족하면 자동 줄바꿈 */
+    flex-direction: column;
+    align-items: center;
+    background-color: #f0f8ff;
+    padding-top: 20px;
+}
+
+/* 🚨 [핵심] 눈송이 배경이 버튼 클릭을 방해하지 않게 설정 */
+canvas, .snowflake {
+    pointer-events: none; /* 클릭 통과 */
+    z-index: 1; /* 맨 뒤로 */
+}
+
+/* 2. 입력창 구역 (아주 크게!) */
+#input-section {
+    z-index: 999; /* 🚨 제일 앞으로 (클릭 잘 되게) */
+    background: rgba(255, 255, 255, 0.9);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    
+    width: 90%; /* 화면 꽉 차게 */
+    max-width: 500px; /* 너무 퍼지지는 않게 */
+    
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* 칸 사이 간격 */
+    margin-bottom: 20px;
+}
+
+/* 3. 입력칸, 선택박스, 버튼 크기 (대폭 확대) */
+#emotion-select, #snowflake-choice, #diary-text, #save-button {
+    width: 100%;
+    height: 60px; /* 높이 60px (엄청 큼) */
+    font-size: 18px; /* 글씨 큼 */
+    padding: 0 15px;
+    border-radius: 12px;
+    border: 2px solid #ddd;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+
+.selection-row {
+    display: flex;
     gap: 10px;
-    justify-content: center;
-    background: rgba(255, 255, 255, 0.5);
-    padding: 10px; border-radius: 12px;
-}
-.snow-option {
-    width: 50px; height: 50px; /* 크기 살짝 조정 */
-    border-radius: 10px; border: 2px solid transparent;
-    cursor: pointer; display: flex; align-items: center; justify-content: center;
-    background-color: white; transition: all 0.2s;
-}
-.snow-option img { width: 35px; height: 35px; pointer-events: none; }
-.snow-option:hover { transform: scale(1.1); background-color: #f0f8ff; }
-.snow-option.selected {
-    border: 3px solid #4a90e2; background-color: #e3f2fd;
-    box-shadow: 0 0 10px rgba(74, 144, 226, 0.5);
 }
 
-/* 버튼 */
+/* 버튼 꾸미기 */
 #save-button {
-    background-color: #4a90e2; color: white; font-weight: bold; font-size: 18px;
-    border: none; cursor: pointer; margin-top: 10px;
+    background-color: #4a90e2;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
 }
-#save-button:hover { background-color: #357abd; transform: scale(1.02); }
+#save-button:hover {
+    background-color: #357abd;
+    transform: scale(1.02);
+}
 
-/* 병 영역 */
+/* 4. 병 위치 및 눈송이 상자 */
 #bottle-area {
-    position: relative; width: 300px; height: 400px; z-index: 5; margin-bottom: 50px;
+    position: relative;
+    width: 300px; /* 병 너비 */
+    height: 400px; /* 병 높이 */
+    z-index: 5;
+    margin-bottom: 50px; /* 바닥 여백 */
 }
-#bottle-image { width: 100%; height: 100%; object-fit: contain; }
+
+#bottle-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* 눈송이가 쌓이는 투명 상자 (병 안에 맞춤) */
 #snow-pile {
-    position: absolute; bottom: 20px; left: 20px; right: 20px;
-    height: 280px; overflow: hidden;
+    position: absolute;
+    bottom: 20px; 
+    left: 20px;
+    right: 20px;
+    height: 280px; /* 눈 쌓이는 높이 */
+    overflow: hidden; /* 병 밖으로 안 삐져나게 */
+    /* border: 1px solid red; <--- 위치 확인할 때만 주석 푸세요 */
 }
-
-/* 애니메이션 */
-@keyframes fall { from { transform: translateY(-300px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-@keyframes twinkle { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.8); } }
-@keyframes sway { 0% { transform: translateX(-10px); } 100% { transform: translateX(10px); } }
-@keyframes wind { 0% { transform: translateX(0) translateY(-100px) rotate(0deg); } 100% { transform: translateX(50px) translateY(0) rotate(45deg); } }
-
-/* 감정별 동작 */
-.anim-happy { animation: fall 3s ease-out forwards, twinkle 1.5s infinite; }
-.anim-flutter { animation: fall 3s ease-in-out forwards, sway 2s infinite alternate; }
-.anim-peace { animation: fall 5s linear forwards; }
-.anim-normal { animation: fall 1.5s ease-out forwards; }
-.anim-complex { animation: fall 1s ease-in forwards, sway 0.3s infinite alternate; }
-.anim-tired { animation: fall 4s linear forwards; filter: blur(2px); }
-.anim-gloomy { animation: fall 2s ease-out forwards; }
-.anim-annoyed { animation: fall 0.5s linear forwards; }
-.anim-cold { animation: fall 1s linear forwards, wind 1s linear forwards; }
-.anim-lonely { animation: fall 3.5s ease-in-out forwards; }
