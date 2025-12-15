@@ -1,9 +1,10 @@
 /* 1. 기본 설정 */
 body {
     margin: 0;
-    overflow-y: auto; /* 세로 스크롤 허용 */
+    overflow-y: auto; 
     overflow-x: hidden; 
     font-family: 'Pretendard', sans-serif;
+    background-color: #f0f8ff;
 }
 
 #app-container {
@@ -11,20 +12,62 @@ body {
     width: 100%;
     min-height: 100vh; 
     height: auto; 
-    
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    
-    /* 🔴 핵심: 배경색 변경 애니메이션 추가 (0.8초 동안 부드럽게) */
+    display: flex; flex-direction: column; align-items: center;
     transition: background 0.8s ease-in-out;
-    
     padding-top: 20px;
     padding-bottom: 100px; 
-    background-color: #f0f8ff; /* 기본 배경색 */
+    z-index: 10;
 }
 
-/* 🎨 [배경색 설정] 이 클래스들이 붙으면 기본색을 덮어씁니다 */
+/* 🎵 소리 버튼 디자인 */
+#sound-btn {
+    position: fixed; 
+    top: 20px;       
+    right: 20px;     
+    background-color: #ffffff;
+    border: 2px solid #333;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.2s, background-color 0.2s;
+    z-index: 2000; 
+}
+
+#sound-btn:hover {
+    transform: scale(1.1); 
+    background-color: #f0f0f0;
+}
+
+/* 아이콘 스타일 */
+.icon-svg {
+    width: 24px;
+    height: 24px;
+    fill: #333;
+}
+
+/* 상태에 따라 아이콘 숨기기/보이기 */
+.hidden {
+    display: none;
+}
+
+/* ❄️ 배경 눈송이 스타일 */
+#bg-snow-container {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 1; overflow: hidden;
+}
+.bg-snowflake {
+    position: absolute; top: -10px; background-color: white;
+    border-radius: 50%; opacity: 0.8; animation: bgFall linear infinite;
+}
+@keyframes bgFall { to { transform: translateY(110vh); } }
+
+/* 🎨 감정별 배경색 */
 .bg-happy   { background: linear-gradient(to bottom, #1e3c72, #2a5298) !important; }
 .bg-flutter { background: linear-gradient(to bottom, #2980b9, #6dd5fa) !important; }
 .bg-peace   { background: #dceefb !important; }
@@ -36,7 +79,7 @@ body {
 .bg-cold    { background: #8e9eab !important; }
 .bg-lonely  { background: #ffffff !important; }
 
-/* 텍스트 색상 자동 반전 (어두운 배경일 때 글씨 흰색으로) */
+/* 텍스트 색상 반전 */
 .bg-happy h1, .bg-happy label, .bg-happy h2,
 .bg-flutter h1, .bg-flutter label, .bg-flutter h2,
 .bg-complex h1, .bg-complex label, .bg-complex h2,
@@ -46,7 +89,6 @@ body {
     color: white;
 }
 
-/* UI 공통 설정 */
 canvas, .snowflake { pointer-events: none; z-index: 1; }
 
 #input-section {
@@ -62,7 +104,6 @@ canvas, .snowflake { pointer-events: none; z-index: 1; }
     border-radius: 12px; border: 2px solid #ddd; box-sizing: border-box;
 }
 
-/* 눈송이 선택기 (7개) */
 #snowflake-selector-container label {
     display: block; margin-bottom: 8px; font-weight: bold; color: #555; font-size: 14px;
 }
@@ -99,38 +140,30 @@ canvas, .snowflake { pointer-events: none; z-index: 1; }
     height: 280px; overflow: hidden;
 }
 
-/* 기록 리스트 스타일 */
 #history-section {
-    width: 90%; max-width: 500px;
-    margin-top: 20px; z-index: 999;
-    flex-grow: 1; 
+    width: 90%; max-width: 500px; margin-top: 20px; z-index: 999; flex-grow: 1; 
 }
 #history-section h2 {
     text-align: center; margin-bottom: 20px; color: #333; font-size: 1.5rem;
 }
 #diary-list {
-    display: flex; flex-direction: column; gap: 15px;
-    width: 100%;
+    display: flex; flex-direction: column; gap: 15px; width: 100%;
 }
-/* 카드 모양 */
 .diary-card {
     background: rgba(255, 255, 255, 0.95);
-    border-radius: 15px;
-    padding: 20px;
+    border-radius: 15px; padding: 20px;
     display: flex; align-items: center; gap: 15px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     animation: slideUp 0.5s ease-out forwards;
 }
 .diary-card img {
-    width: 45px; height: 45px;
-    background: #f0f8ff; border-radius: 50%; padding: 5px; border: 1px solid #eee;
+    width: 45px; height: 45px; background: #f0f8ff; border-radius: 50%; padding: 5px; border: 1px solid #eee;
 }
 .diary-info { flex: 1; }
 .diary-date { font-size: 12px; color: #888; margin-bottom: 4px; }
 .diary-emotion { font-size: 14px; font-weight: bold; color: #4a90e2; margin-bottom: 4px; }
 .diary-content { font-size: 16px; color: #333; line-height: 1.4; word-break: break-all; }
 
-/* 애니메이션 정의 */
 @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes fall { from { transform: translateY(-300px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 @keyframes twinkle { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.8); } }
