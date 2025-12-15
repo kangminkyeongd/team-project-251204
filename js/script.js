@@ -6,10 +6,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const diaryInput = document.getElementById('diary-text');
     const snowflakeHiddenInput = document.getElementById('snowflake-choice');
     
-    // 눈송이 옵션들 (7개 모두 자동 인식)
+    // 🔴 일기 목록 박스 가져오기
+    const diaryList = document.getElementById('diary-list');
+
+    // 눈송이 선택 옵션들
     const snowOptions = document.querySelectorAll('.snow-option');
 
-    // 눈송이 클릭 로직
+    // 눈송이 이미지 클릭 시 선택 처리
     snowOptions.forEach(option => {
         option.addEventListener('click', () => {
             snowOptions.forEach(opt => opt.classList.remove('selected'));
@@ -31,33 +34,48 @@ document.addEventListener('DOMContentLoaded', () => {
         'lonely':  { bg: 'bg-lonely',  anim: 'anim-lonely',  size: 'small' }
     };
 
-    emotionSelect.addEventListener('change', () => {
+    // 배경색 변경 함수
+    function updateBackground() {
         const config = emotionConfig[emotionSelect.value];
         appContainer.className = ''; 
         appContainer.id = 'app-container'; 
         if (config && config.bg) appContainer.classList.add(config.bg);
-    });
+    }
 
+    // 감정 바꿀 때마다 배경색 변경
+    emotionSelect.addEventListener('change', updateBackground);
+
+    // 버튼 클릭 (저장)
     saveButton.addEventListener('click', () => {
+        // 내용 없으면 경고
         if (diaryInput.value.trim() === "") {
             alert("오늘의 감정을 기록해주세요!");
             diaryInput.focus();
             return;
         }
 
-        const selectedEmotion = emotionSelect.value;
-        const config = emotionConfig[selectedEmotion] || emotionConfig['normal'];
-        let snowCount = (selectedEmotion === 'gloomy') ? 5 : 1; 
+        const selectedEmotionValue = emotionSelect.value;
+        const selectedEmotionText = emotionSelect.options[emotionSelect.selectedIndex].text;
+        const config = emotionConfig[selectedEmotionValue] || emotionConfig['normal'];
+        const snowImageSrc = snowflakeHiddenInput.value;
 
+        // 1. 병 안에 눈송이 떨어뜨리기
+        let snowCount = (selectedEmotionValue === 'gloomy') ? 5 : 1; 
         for (let i = 0; i < snowCount; i++) {
-            createSnowflake(config);
+            createSnowflake(config, snowImageSrc);
         }
+
+        // 🔴 2. 아래쪽 리스트에 일기 카드 추가하기 (스크롤됨)
+        addDiaryEntry(selectedEmotionText, diaryInput.value, snowImageSrc);
+
+        // 3. 입력창 비우기
         diaryInput.value = ""; 
     });
 
-    function createSnowflake(config) {
+    // 눈송이 생성 함수
+    function createSnowflake(config, imgSrc) {
         const newSnowflake = document.createElement('img');
-        newSnowflake.src = snowflakeHiddenInput.value; 
+        newSnowflake.src = imgSrc;
         newSnowflake.style.position = 'absolute';
         
         let size = 30; 
@@ -73,5 +91,28 @@ document.addEventListener('DOMContentLoaded', () => {
         
         newSnowflake.classList.add(config.anim);
         snowPile.appendChild(newSnowflake);
+    }
+
+    // 🔴 일기 카드 생성 함수
+    function addDiaryEntry(emotionText, text, imageSrc) {
+        const now = new Date();
+        const dateString = now.toLocaleDateString('ko-KR', { 
+            year: 'numeric', month: 'long', day: 'numeric', 
+            weekday: 'short', hour: '2-digit', minute: '2-digit' 
+        });
+
+        const card = document.createElement('div');
+        card.className = 'diary-card';
+        card.innerHTML = `
+            <img src="${imageSrc}" alt="눈송이">
+            <div class="diary-info">
+                <div class="diary-date">${dateString}</div>
+                <div class="diary-emotion">${emotionText}</div>
+                <div class="diary-content">${text}</div>
+            </div>
+        `;
+
+        // 리스트의 맨 위에 추가 (최신순)
+        diaryList.prepend(card);
     }
 });
