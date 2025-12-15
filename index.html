@@ -18,7 +18,7 @@
                     <option value="happy">😊 행복 (따뜻함)</option>
                     <option value="flutter">😆 설렘 (두근거림)</option>
                     <option value="peace">😌 평온 (잔잔함)</option>
-                    <option value="normal">😐 무난 (일상)</option>
+                    <option value="normal" selected>😐 무난 (일상)</option>
                     <option value="complex">🤔 복잡 (어지러움)</option>
                     <option value="tired">😮‍💨 피곤 (흐림)</option>
                     <option value="gloomy">😢 우울 (가라앉음)</option>
@@ -31,27 +31,13 @@
             <div id="snowflake-selector-container">
                 <label>눈송이 디자인 선택:</label>
                 <div class="snowflake-options">
-                    <div class="snow-option selected" data-value="assets/snow-1.png">
-                        <img src="assets/snow-1.png" alt="눈1">
-                    </div>
-                    <div class="snow-option" data-value="assets/snow-2.png">
-                        <img src="assets/snow-2.png" alt="눈2">
-                    </div>
-                    <div class="snow-option" data-value="assets/snow-3.png">
-                        <img src="assets/snow-3.png" alt="눈3">
-                    </div>
-                    <div class="snow-option" data-value="assets/snow-4.png">
-                        <img src="assets/snow-4.png" alt="눈4">
-                    </div>
-                    <div class="snow-option" data-value="assets/snow-5.png">
-                        <img src="assets/snow-5.png" alt="눈5">
-                    </div>
-                    <div class="snow-option" data-value="assets/snow-6.png">
-                        <img src="assets/snow-6.png" alt="눈6">
-                    </div>
-                    <div class="snow-option" data-value="assets/snow-7.png">
-                        <img src="assets/snow-7.png" alt="눈7">
-                    </div>
+                    <div class="snow-option selected" data-value="assets/snow-1.png"><img src="assets/snow-1.png"></div>
+                    <div class="snow-option" data-value="assets/snow-2.png"><img src="assets/snow-2.png"></div>
+                    <div class="snow-option" data-value="assets/snow-3.png"><img src="assets/snow-3.png"></div>
+                    <div class="snow-option" data-value="assets/snow-4.png"><img src="assets/snow-4.png"></div>
+                    <div class="snow-option" data-value="assets/snow-5.png"><img src="assets/snow-5.png"></div>
+                    <div class="snow-option" data-value="assets/snow-6.png"><img src="assets/snow-6.png"></div>
+                    <div class="snow-option" data-value="assets/snow-7.png"><img src="assets/snow-7.png"></div>
                 </div>
                 <input type="hidden" id="snowflake-choice" value="assets/snow-1.png">
             </div>
@@ -65,11 +51,12 @@
             <div id="snow-pile"></div>
         </div>
         
-        <div id="archive-section">
-            <h2>Archived Memories</h2>
-            <div class="month-block">12월의 눈</div>
-            <div class="month-block">1월의 눈</div>
-        </div>
+        <section id="history-section">
+            <h2>📜 나의 감정 기록</h2>
+            <div id="diary-list">
+                </div>
+        </section>
+
     </div>
     
     <script src="js/script.js"></script> 
