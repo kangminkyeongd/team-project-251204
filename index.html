@@ -26,16 +26,37 @@
                     <option value="cold">🥶 차가움 (시림)</option>
                     <option value="lonely">🌨️ 외로움 (텅 빔)</option>
                 </select>
+            </div>
 
-                <select id="snowflake-choice">
-                    <option value="assets/snow-1.png">❄️ 디자인 A</option>
-                    <option value="assets/snow-2.png">❄️ 디자인 B</option>
-                    <option value="assets/snow-3.png">❄️ 디자인 C</option>
-                </select>
+            <div id="snowflake-selector-container">
+                <label>눈송이 디자인 선택:</label>
+                <div class="snowflake-options">
+                    <div class="snow-option selected" data-value="assets/snow-1.png">
+                        <img src="assets/snow-1.png" alt="눈1">
+                    </div>
+                    <div class="snow-option" data-value="assets/snow-2.png">
+                        <img src="assets/snow-2.png" alt="눈2">
+                    </div>
+                    <div class="snow-option" data-value="assets/snow-3.png">
+                        <img src="assets/snow-3.png" alt="눈3">
+                    </div>
+                    <div class="snow-option" data-value="assets/snow-4.png">
+                        <img src="assets/snow-4.png" alt="눈4">
+                    </div>
+                    <div class="snow-option" data-value="assets/snow-5.png">
+                        <img src="assets/snow-5.png" alt="눈5">
+                    </div>
+                    <div class="snow-option" data-value="assets/snow-6.png">
+                        <img src="assets/snow-6.png" alt="눈6">
+                    </div>
+                    <div class="snow-option" data-value="assets/snow-7.png">
+                        <img src="assets/snow-7.png" alt="눈7">
+                    </div>
+                </div>
+                <input type="hidden" id="snowflake-choice" value="assets/snow-1.png">
             </div>
 
             <input type="text" id="diary-text" placeholder="오늘의 한 줄 기록">
-            
             <button id="save-button">눈송이 담기</button>
         </section>
 
@@ -49,7 +70,6 @@
             <div class="month-block">12월의 눈</div>
             <div class="month-block">1월의 눈</div>
         </div>
-
     </div>
     
     <script src="js/script.js"></script> 
