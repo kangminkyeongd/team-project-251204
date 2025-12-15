@@ -1,51 +1,77 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. 필요한 요소들 가져오기
+    const appContainer = document.getElementById('app-container');
     const saveButton = document.getElementById('save-button');
     const snowPile = document.getElementById('snow-pile');
-    const snowflakeSelect = document.getElementById('snowflake-choice');
+    const emotionSelect = document.getElementById('emotion-select');
     const diaryInput = document.getElementById('diary-text');
+    const snowflakeHiddenInput = document.getElementById('snowflake-choice');
+    
+    // 눈송이 옵션들 (7개 모두 자동 인식)
+    const snowOptions = document.querySelectorAll('.snow-option');
 
-    // 버튼이 잘 찾아졌는지 확인 (에러 방지)
-    if (!saveButton) {
-        console.error("버튼을 찾을 수 없습니다! HTML ID를 확인하세요.");
-        return;
-    }
+    // 눈송이 클릭 로직
+    snowOptions.forEach(option => {
+        option.addEventListener('click', () => {
+            snowOptions.forEach(opt => opt.classList.remove('selected'));
+            option.classList.add('selected');
+            snowflakeHiddenInput.value = option.getAttribute('data-value');
+        });
+    });
 
-    // 2. 버튼 클릭 이벤트 (눈송이 담기)
+    const emotionConfig = {
+        'happy':   { bg: 'bg-happy',   anim: 'anim-happy',   size: 'small' },
+        'flutter': { bg: 'bg-flutter', anim: 'anim-flutter', size: 'various' },
+        'peace':   { bg: 'bg-peace',   anim: 'anim-peace',   size: 'fixed' },
+        'normal':  { bg: 'bg-normal',  anim: 'anim-normal',  size: 'fixed' },
+        'complex': { bg: 'bg-complex', anim: 'anim-complex', size: 'irregular'},
+        'tired':   { bg: 'bg-tired',   anim: 'anim-tired',   size: 'large' },
+        'gloomy':  { bg: 'bg-gloomy',  anim: 'anim-gloomy',  size: 'small' },
+        'annoyed': { bg: 'bg-annoyed', anim: 'anim-annoyed', size: 'small' },
+        'cold':    { bg: 'bg-cold',    anim: 'anim-cold',    size: 'small' },
+        'lonely':  { bg: 'bg-lonely',  anim: 'anim-lonely',  size: 'small' }
+    };
+
+    emotionSelect.addEventListener('change', () => {
+        const config = emotionConfig[emotionSelect.value];
+        appContainer.className = ''; 
+        appContainer.id = 'app-container'; 
+        if (config && config.bg) appContainer.classList.add(config.bg);
+    });
+
     saveButton.addEventListener('click', () => {
-        
-        // 내용 입력했는지 확인
         if (diaryInput.value.trim() === "") {
-            alert("오늘의 기록을 남겨주세요!");
+            alert("오늘의 감정을 기록해주세요!");
+            diaryInput.focus();
             return;
         }
 
-        // 3. 눈송이 이미지 만들기
-        const newSnowflake = document.createElement('img');
-        
-        // 선택한 이미지로 설정
-        newSnowflake.src = snowflakeSelect.value; 
-        
-        // 스타일 지정
-        newSnowflake.style.position = 'absolute';
-        newSnowflake.style.width = '35px'; // 눈송이 크기
-        newSnowflake.style.height = '35px';
-        newSnowflake.style.zIndex = '10';
-        
-        // 병 안에서 랜덤 위치 잡기
-        // 왼쪽(0%) ~ 오른쪽(90%) 사이 랜덤
-        newSnowflake.style.left = Math.random() * 85 + '%'; 
-        // 바닥(0%) ~ 위(80%) 사이 랜덤
-        newSnowflake.style.bottom = Math.random() * 80 + '%'; 
-        
-        // 살짝 회전시켜서 자연스럽게
-        newSnowflake.style.transform = `rotate(${Math.random() * 360}deg)`;
+        const selectedEmotion = emotionSelect.value;
+        const config = emotionConfig[selectedEmotion] || emotionConfig['normal'];
+        let snowCount = (selectedEmotion === 'gloomy') ? 5 : 1; 
 
-        // 4. 병 안에 집어넣기
-        snowPile.appendChild(newSnowflake);
-
-        // 5. 마무리
-        diaryInput.value = ""; // 입력창 비우기
-        alert("눈송이가 병에 담겼습니다! ❄️");
+        for (let i = 0; i < snowCount; i++) {
+            createSnowflake(config);
+        }
+        diaryInput.value = ""; 
     });
+
+    function createSnowflake(config) {
+        const newSnowflake = document.createElement('img');
+        newSnowflake.src = snowflakeHiddenInput.value; 
+        newSnowflake.style.position = 'absolute';
+        
+        let size = 30; 
+        if (config.size === 'small') size = 20;            
+        else if (config.size === 'large') size = 50;       
+        else if (config.size === 'various') size = Math.random() * 30 + 15; 
+        else if (config.size === 'irregular') size = Math.random() > 0.5 ? 15 : 45; 
+
+        newSnowflake.style.width = `${size}px`;
+        newSnowflake.style.height = `${size}px`;
+        newSnowflake.style.left = Math.random() * 90 + '%';
+        newSnowflake.style.bottom = Math.random() * 80 + '%';
+        
+        newSnowflake.classList.add(config.anim);
+        snowPile.appendChild(newSnowflake);
+    }
 });
