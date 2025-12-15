@@ -1,106 +1,34 @@
-/* 전체 레이아웃 */
-body { margin: 0; overflow-x: hidden; font-family: 'Pretendard', sans-serif; }
+/* --- 기존 코드를 이걸로 덮어씌우세요 --- */
 
-#app-container {
-    min-height: 100vh;
-    display: flex; flex-direction: column; align-items: center;
-    transition: background 1s ease; /* 배경색 부드럽게 전환 */
-    background-color: #f0f8ff; /* 기본 눈밭 색 */
+/* 입력창 전체 박스 */
+#input-section { 
+    z-index: 10; 
+    display: flex; flex-direction: column; gap: 15px; align-items: center;
+    background: rgba(255, 255, 255, 0.5); /* 좀 더 밝게 */
+    padding: 25px; /* 여백을 15px -> 25px로 넉넉하게 */
+    border-radius: 20px; /* 둥글게 */
+    backdrop-filter: blur(10px);
+    width: 80%; /* 화면의 80% 차지하게 넓힘 */
+    max-width: 500px; /* 너무 커지지는 않게 제한 */
 }
 
-/* --- 10가지 감정 배경색 (표 기반) --- */
-#app-container.happy { background: linear-gradient(to bottom, #1e3c72, #2a5298); } /* 밝은 남색 */
-#app-container.flutter { background: linear-gradient(to bottom, #2980b9, #6dd5fa); } /* 파랑 */
-#app-container.peace { background: #dceefb; } /* 연한 남색/하늘 */
-#app-container.normal { background: #f0f8ff; } /* 기본 */
-#app-container.complex { background: #536976; } /* 회청색 */
-#app-container.tired { background: #232526; } /* 어두움 */
-#app-container.gloomy { background: #141e30; } /* 어두운 남색 */
-#app-container.annoyed { background: #000000; } /* 대비 강함 */
-#app-container.cold { background: #8e9eab; } /* 푸른 회색 */
-#app-container.lonely { background: #ffffff; } /* 넓은 여백(흰색) */
-
-/* 입력창 스타일 */
-#input-section { margin-top: 20px; z-index: 10; display: flex; flex-direction: column; gap: 10px; align-items: center;}
-.selection-row { display: flex; gap: 10px; }
-input, select, button { padding: 10px; border-radius: 8px; border: 1px solid #ccc; }
-
-/* --- 🍾 유리병 스타일 (이미지 적용) --- */
-#bottle-area {
-    position: relative;
-    width: 300px;  /* 님 디자인 병 크기에 맞춰 조절 */
-    height: 400px;
-    margin-top: 50px;
+/* 입력칸, 선택박스, 버튼 공통 설정 */
+input, select, button { 
+    padding: 15px; /* 안쪽 여백을 늘려서 뚱뚱하게 */
+    border-radius: 12px; 
+    border: 1px solid #ccc; 
+    font-size: 18px; /* 글씨 크기 키움 (14px -> 18px) */
+    width: 100%; /* 꽉 차게 */
 }
 
-#bottle-image {
-    width: 100%; height: 100%;
-    object-fit: contain;
-    position: relative;
-    z-index: 2; /* 눈송이보다 앞에 옴 (유리 느낌) */
-    pointer-events: none; /* 클릭은 통과 */
+/* 버튼 꾸미기 */
+button { 
+    cursor: pointer; 
+    background-color: #2a5298; /* 진한 파란색 버튼 */
+    color: white; /* 흰 글씨 */
+    font-weight: bold; 
+    border: none;
+    transition: 0.2s;
 }
 
-/* 눈송이가 쌓이는 영역 (병 내부) */
-#snow-pile {
-    position: absolute;
-    bottom: 20px; left: 20px; right: 20px; top: 50px; /* 병 이미지 안쪽 공간에 맞게 조절 */
-    z-index: 1; /* 병 뒤에 쌓임 */
-    overflow: hidden;
-}
-
-/* --- ❄️ 눈송이 공통 스타일 --- */
-.snowflake {
-    position: absolute;
-    width: 30px; height: 30px; /* 기본 크기 */
-    background-size: cover; /* 이미지가 꽉 차게 */
-    opacity: 0;
-    /* 떨어지는 애니메이션 (기본) */
-    animation: fall 1s forwards ease-out; 
-}
-
-/* --- 감정별 애니메이션/스타일 (표 내용 적용) --- */
-
-/* 1. 행복 (따뜻함): 느림, 작음, 반짝임 */
-.snowflake.happy { width: 20px; height: 20px; animation: fall 3s forwards, twinkle 2s infinite; }
-
-/* 2. 설렘: 느림, 흔들림 */
-.snowflake.flutter { animation: fall 3s forwards, swing 1s infinite ease-in-out; }
-
-/* 3. 평온: 매우 느림 */
-.snowflake.peace { animation: fall 5s forwards linear; }
-
-/* 4. 무난: 기본 */
-.snowflake.normal { animation: fall 1.5s forwards; }
-
-/* 5. 복잡: 빠름, 불규칙 흔들림 */
-.snowflake.complex { animation: fall 0.8s forwards, shake 0.2s infinite; }
-
-/* 6. 피곤: 매우 느림, 큼, 흐림 */
-.snowflake.tired { width: 50px; height: 50px; animation: fall 4s forwards; filter: blur(2px); }
-
-/* 7. 우울: 중간, 작음 */
-.snowflake.gloomy { width: 15px; height: 15px; animation: fall 2s forwards; }
-
-/* 8. 짜증: 매우 빠름, 직선 낙하 */
-.snowflake.annoyed { animation: fall 0.3s forwards linear; }
-
-/* 9. 차가움: 빠름, 바람 효과 (옆으로 날림) */
-.snowflake.cold { animation: fall-wind 1s forwards; }
-
-/* 10. 외로움: 느림, 정적 */
-.snowflake.lonely { animation: fall 4s forwards; }
-
-
-/* --- 키프레임 (동작 정의) --- */
-@keyframes fall {
-    from { top: -50px; opacity: 1; }
-    to { top: 80%; opacity: 1; transform: rotate(360deg); } /* 바닥에 쌓이는 위치 */
-}
-@keyframes fall-wind {
-    from { top: -50px; left: 20%; opacity: 1; }
-    to { top: 80%; left: 80%; opacity: 1; } /* 대각선으로 날림 */
-}
-@keyframes twinkle { 50% { opacity: 0.5; transform: scale(0.8); } }
-@keyframes swing { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(10px); } }
-@keyframes shake { 0% { transform: translateX(-2px); } 100% { transform: translateX(2px); } }
+button:hover { transform: scale(1.05); } /* 마우스 올리면 살짝 커짐 */
