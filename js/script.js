@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // 요소 가져오기
     const appContainer = document.getElementById('app-container');
     const saveButton = document.getElementById('save-button');
     const snowPile = document.getElementById('snow-pile');
@@ -6,8 +7,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const diaryInput = document.getElementById('diary-text');
     const snowflakeHiddenInput = document.getElementById('snowflake-choice');
     const diaryList = document.getElementById('diary-list');
-    const historySection = document.getElementById('history-section'); 
+    const historySection = document.getElementById('history-section');
+    
+    // 🎵 음악 관련 요소
+    const audio = document.getElementById('bgm');
+    const soundBtn = document.getElementById('sound-btn');
+    const iconOn = document.getElementById('icon-on');
+    const iconOff = document.getElementById('icon-off');
 
+    // ❄️ 배경 눈 관련 요소
+    const bgSnowContainer = document.getElementById('bg-snow-container');
     const snowOptions = document.querySelectorAll('.snow-option');
 
     // 눈송이 이미지 클릭 시 선택 처리
@@ -19,7 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 감정별 설정 (배경색 클래스 매핑)
     const emotionConfig = {
         'happy':   { bg: 'bg-happy',   anim: 'anim-happy',   size: 'small' },
         'flutter': { bg: 'bg-flutter', anim: 'anim-flutter', size: 'various' },
@@ -33,27 +41,45 @@ document.addEventListener('DOMContentLoaded', () => {
         'lonely':  { bg: 'bg-lonely',  anim: 'anim-lonely',  size: 'small' }
     };
 
-    // 🔴 핵심: 배경색 변경 함수
     function updateBackground() {
         const config = emotionConfig[emotionSelect.value];
-        
-        // 기존 클래스 모두 제거하고 깨끗한 상태로 만듦
         appContainer.className = ''; 
-        // 혹시 모르니 ID 다시 부여
         appContainer.id = 'app-container'; 
-        
-        // 새로운 감정 배경 클래스 추가
-        if (config && config.bg) {
-            appContainer.classList.add(config.bg);
-        }
+        if (config && config.bg) appContainer.classList.add(config.bg);
     }
-
-    // 🔴 이벤트 연결: 감정 선택이 바뀔 때마다 updateBackground 실행
-    emotionSelect.addEventListener('change', updateBackground);
     
-    // 페이지 로드시 초기 상태 한 번 실행 (처음 '무난' 상태 적용)
-    updateBackground();
+    emotionSelect.addEventListener('change', updateBackground);
+    updateBackground(); 
 
+    // 🎵 음악 버튼 클릭 기능
+    soundBtn.addEventListener('click', () => {
+        if (audio.paused) {
+            // 음악이 멈춰있으면 -> 재생
+            audio.play();
+            iconOn.classList.remove('hidden'); // 소리 아이콘 보이기
+            iconOff.classList.add('hidden');   // 음소거 아이콘 숨기기
+        } else {
+            // 음악이 나오고 있으면 -> 일시정지
+            audio.pause();
+            iconOn.classList.add('hidden');    // 소리 아이콘 숨기기
+            iconOff.classList.remove('hidden');// 음소거 아이콘 보이기
+        }
+    });
+
+    // ❄️ 배경에 눈 내리는 기능
+    function createBgSnowflake() {
+        const flake = document.createElement('div');
+        flake.classList.add('bg-snowflake');
+        const size = Math.random() * 5 + 2 + 'px'; 
+        flake.style.width = size;
+        flake.style.height = size;
+        flake.style.left = Math.random() * 100 + 'vw';
+        flake.style.opacity = Math.random();
+        flake.style.animationDuration = Math.random() * 3 + 2 + 's';
+        bgSnowContainer.appendChild(flake);
+        setTimeout(() => { flake.remove(); }, 5000); 
+    }
+    setInterval(createBgSnowflake, 200);
 
     // 저장 버튼 클릭
     saveButton.addEventListener('click', () => {
@@ -68,19 +94,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const config = emotionConfig[selectedEmotionValue] || emotionConfig['normal'];
         const snowImageSrc = snowflakeHiddenInput.value;
 
-        // 1. 병 안에 눈송이 투하
         let snowCount = (selectedEmotionValue === 'gloomy') ? 5 : 1; 
         for (let i = 0; i < snowCount; i++) {
             createSnowflake(config, snowImageSrc);
         }
 
-        // 2. 아래쪽 리스트에 일기 추가
         addDiaryEntry(selectedEmotionText, diaryInput.value, snowImageSrc);
-
-        // 3. 입력창 비우기
         diaryInput.value = ""; 
 
-        // 4. 화면 자동 스크롤
         setTimeout(() => {
             historySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }, 100);
@@ -101,7 +122,6 @@ document.addEventListener('DOMContentLoaded', () => {
         newSnowflake.style.height = `${size}px`;
         newSnowflake.style.left = Math.random() * 90 + '%';
         newSnowflake.style.bottom = Math.random() * 80 + '%';
-        
         newSnowflake.classList.add(config.anim);
         snowPile.appendChild(newSnowflake);
     }
@@ -123,7 +143,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="diary-content">${text}</div>
             </div>
         `;
-
         diaryList.prepend(card);
     }
 });
